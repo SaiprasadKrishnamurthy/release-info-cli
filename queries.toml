@@ -23,3 +23,7 @@ sql = "SELECT gitSha as git_revision , mavenVersion as maven_version, commitMess
 [get_git_revisions_of_an_artifact_and_version]
 description = "Gets the list of GIT Revisions of a current artifact"
 sql = "SELECT gitSha as git_revision , mavenVersion as maven_version, commitMessage as commit_message, author, datetime(timestamp, 'unixepoch') as timestamp, tickets FROM VERSION_INFO where artifactid=:parentartifactid and mavenVersion=:mavenversion
+
+[get_git_revisions_by_sha]
+description = "Gets the list of GIT Revisions by a Revision SHA"
+sql = "SELECT gitSha as git_revision , mavenVersion as maven_version, commitMessage as commit_message, author, datetime(timestamp, 'unixepoch') as timestamp, tickets, entries FROM VERSION_INFO where gitSha=:gitRevision
