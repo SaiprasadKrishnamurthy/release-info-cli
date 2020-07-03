@@ -1,0 +1,25 @@
+title = "Named Queries"
+
+[get_all_dependencies_info]
+description = "Gets all the Dependencies Loaded into the database"
+sql = "SELECT * FROM DEPENDENCIES_INFO"
+
+[get_artifacts_and_current_versions]
+description = "Gets all the Artifacts and their currently available versions seen on the server"
+sql = "SELECT parentartifactid, max(parentversion) as current_version, name, description, url FROM DEPENDENCIES_INFO group by parentartifactid order by parentartifactid"
+
+[get_dependencies_of_an_artifact_and_version]
+description = "Gets the list of dependencies of an artifact of a specific version"
+sql = "SELECT * FROM DEPENDENCIES_INFO where parentartifactid=:parentartifactid and parentversion=:parentversion"
+
+[get_dependencies_of_a_current_artifact]
+description = "Gets the list of dependencies of an artifact of current version"
+sql = "SELECT * FROM DEPENDENCIES_INFO where parentartifactid=:parentartifactid and parentversion=(SELECT max(parentversion) FROM DEPENDENCIES_INFO WHERE parentartifactid=:parentartifactid)"
+
+[get_git_revisions_of_a_current_artifact]
+description = "Gets the list of GIT Revisions of a current artifact"
+sql = "SELECT gitSha as git_revision , mavenVersion as maven_version, commitMessage as commit_message, author,  datetime(timestamp, 'unixepoch') as timestamp, tickets FROM VERSION_INFO where artifactid=:parentartifactid and mavenVersion = (SELECT max(parentversion) FROM DEPENDENCIES_INFO WHERE parentartifactid=:parentartifactid)"
+
+[get_git_revisions_of_an_artifact_and_version]
+description = "Gets the list of GIT Revisions of a current artifact"
+sql = "SELECT gitSha as git_revision , mavenVersion as maven_version, commitMessage as commit_message, author, datetime(timestamp, 'unixepoch') as timestamp, tickets FROM VERSION_INFO where artifactid=:parentartifactid and mavenVersion=:mavenversion
